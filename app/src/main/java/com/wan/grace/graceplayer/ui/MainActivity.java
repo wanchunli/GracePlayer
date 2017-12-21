@@ -6,6 +6,9 @@ import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.handler.HandlerUtil;
 import com.wan.grace.graceplayer.widget.SplashScreen;
 
+/**
+ * 主界面
+ */
 public class MainActivity extends BaseActivity {
 
     private SplashScreen splashScreen;
