@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GracePlayer.iml" filepath="$PROJECT_DIR$/GracePlayer.iml" />
-      <module fileurl="file://D:\personalItem\GracePlayer\GracePlayer.iml" filepath="D:\personalItem\GracePlayer\GracePlayer.iml" />
       <module fileurl="file://D:\personalItem\GracePlayer\.idea\GracePlayer.iml" filepath="D:\personalItem\GracePlayer\.idea\GracePlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
