@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         splashScreen = new SplashScreen(this);
         splashScreen.show(R.mipmap.art_login_bg,
-                SplashScreen.CENTER_OUT);
+                SplashScreen.SLIDE_LEFT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        OpeningStartAnimation openingStartAnimation = new OpeningStartAnimation.Builder(this)
