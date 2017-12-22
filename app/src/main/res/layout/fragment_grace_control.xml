@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical"
+    tools:context="com.wan.grace.graceplayer.fragment.GraceControlFragment">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-3dp"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/playbar_img"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_weight="0"
+            fresco:placeholderImage="@mipmap/default_music_image"
+            fresco:placeholderImageScaleType="fitXY" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/playbar_info"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/playbar_singer"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:ellipsize="end"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/play_list"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/playbar_btn_playlist" />
+
+        <ImageView
+            android:id="@+id/control"
+            android:layout_width="41dp"
+            android:layout_height="46dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/playbar_btn_play"/>
+
+        <ImageView
+            android:layout_width="41dp"
+            android:layout_height="46dp"
+            android:visibility="gone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/playbar_btn_play" />
+
+        <ImageView
+            android:id="@+id/play_next"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/playbar_btn_next" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/song_progress_normal"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:progress="0" />
+</LinearLayout>

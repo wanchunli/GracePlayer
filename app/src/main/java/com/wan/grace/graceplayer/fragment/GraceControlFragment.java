@@ -8,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wan.grace.graceplayer.R;
-import com.wan.grace.graceplayer.bilibili.utils.ThemeUtils;
-import com.wan.grace.graceplayer.bilibili.widgets.TintImageView;
-import com.wan.grace.graceplayer.bilibili.widgets.TintProgressBar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +25,7 @@ import com.wan.grace.graceplayer.bilibili.widgets.TintProgressBar;
 public class GraceControlFragment extends BaseFragment {
 //    private OnFragmentInteractionListener mListener;
 
-    private TintProgressBar mProgress;
+    private ProgressBar mProgress;
     public Runnable mUpdateProgress = new Runnable() {
 
         @Override
@@ -47,7 +45,7 @@ public class GraceControlFragment extends BaseFragment {
 
         }
     };
-    private TintImageView mPlayPause;
+    private ImageView mPlayPause;
     private TextView mTitle;
     private TextView mArtist;
     private SimpleDraweeView mAlbumArt;
@@ -83,15 +81,15 @@ public class GraceControlFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_grace_control, container, false);
         this.rootView = rootView;
-        mPlayPause = (TintImageView) rootView.findViewById(R.id.control);
-        mProgress = (TintProgressBar) rootView.findViewById(R.id.song_progress_normal);
+        mPlayPause = (ImageView) rootView.findViewById(R.id.control);
+        mProgress = (ProgressBar) rootView.findViewById(R.id.song_progress_normal);
         mTitle = (TextView) rootView.findViewById(R.id.playbar_info);
         mArtist = (TextView) rootView.findViewById(R.id.playbar_singer);
         mAlbumArt = (SimpleDraweeView) rootView.findViewById(R.id.playbar_img);
         next = (ImageView) rootView.findViewById(R.id.play_next);
         playQueue = (ImageView) rootView.findViewById(R.id.play_list);
 
-        mProgress.setProgressTintList(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary));
+//        mProgress.setProgressTintList(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary));
         mProgress.postDelayed(mUpdateProgress,0);
         mPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +97,19 @@ public class GraceControlFragment extends BaseFragment {
                 Toast.makeText(getActivity(),"播放",Toast.LENGTH_LONG).show();
             }
         });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"下一首",Toast.LENGTH_LONG).show();
+            }
+        });
+        playQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"队列",Toast.LENGTH_LONG).show();
+            }
+        });
+
         return rootView;
 
     }

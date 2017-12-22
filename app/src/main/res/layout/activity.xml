@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbarTextColor">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_color_primary"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/bar_net"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/bar_music"
+                android:background="@drawable/actionbar_disco"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/bar_music"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@drawable/actionbar_music"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/bar_friends"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/bar_music"
+                android:background="@drawable/actionbar_friends"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/bar_search"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/actionbar_search"
+                android:scaleType="center" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>
