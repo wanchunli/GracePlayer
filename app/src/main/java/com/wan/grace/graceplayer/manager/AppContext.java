@@ -2,6 +2,7 @@ package com.wan.grace.graceplayer.manager;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.wan.grace.graceplayer.utils.GetBaiduLocation;
 
@@ -20,6 +21,7 @@ public class AppContext extends Application{
         //初始化Fresco
         Fresco.initialize(getApplicationContext());
         baiduLocation = new GetBaiduLocation(this);
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     public static AppContext getInstance() {
