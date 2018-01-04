@@ -7,10 +7,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.adapter.CustomViewPagerAdapter;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends MVPBaseActivity<MainView,MainPresenter> implements MainView{
 
+    private long time = 0;
     private ActionBar ab;
     private SplashScreen splashScreen;
     private ArrayList<ImageView> tabs = new ArrayList<>();
@@ -254,5 +257,26 @@ public class MainActivity extends MVPBaseActivity<MainView,MainPresenter> implem
         }else if(weather.equals("霾")){
             mweathericon.setBackgroundResource(R.drawable.w_mai_53);
         }
+    }
+
+    /**
+     * 双击返回桌面
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - time > 1000)) {
+                Toast.makeText(this, "再按一次返回桌面", Toast.LENGTH_SHORT).show();
+                time = System.currentTimeMillis();
+            } else {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                startActivity(intent);
+            }
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+
     }
 }

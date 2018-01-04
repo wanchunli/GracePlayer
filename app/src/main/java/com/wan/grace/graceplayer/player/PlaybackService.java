@@ -19,10 +19,10 @@ import com.wan.grace.graceplayer.bean.Song;
  */
 public class PlaybackService extends Service implements IPlayback, IPlayback.Callback {
 
-    private static final String ACTION_PLAY_TOGGLE = "io.github.ryanhoo.music.ACTION.PLAY_TOGGLE";
-    private static final String ACTION_PLAY_LAST = "io.github.ryanhoo.music.ACTION.PLAY_LAST";
-    private static final String ACTION_PLAY_NEXT = "io.github.ryanhoo.music.ACTION.PLAY_NEXT";
-    private static final String ACTION_STOP_SERVICE = "io.github.ryanhoo.music.ACTION.STOP_SERVICE";
+    private static final String ACTION_PLAY_TOGGLE = "com.wan.grace.music.ACTION.PLAY_TOGGLE";
+    private static final String ACTION_PLAY_LAST = "com.wan.grace.music.ACTION.PLAY_LAST";
+    private static final String ACTION_PLAY_NEXT = "com.wan.grace.music.ACTION.PLAY_NEXT";
+    private static final String ACTION_STOP_SERVICE = "com.wan.grace.music.ACTION.STOP_SERVICE";
 
     private static final int NOTIFICATION_ID = 1;
 
