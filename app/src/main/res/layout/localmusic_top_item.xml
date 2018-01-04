@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.allen.library.SuperTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:stv="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/super_texttopview"
+    android:background="@color/normalBackground"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    stv:sLeftTextColor="@android:color/black"
+    stv:sLeftTopTextSize="18sp"
+    stv:sLeftTvDrawableHeight="50dp"
+    stv:sLeftTvDrawableWidth="50dp"
+    stv:sLeftViewGravity="left_center">
+
+</com.allen.library.SuperTextView>

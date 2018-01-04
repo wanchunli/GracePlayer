@@ -19,8 +19,8 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/playbar_img"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="3dp"
             android:layout_weight="0"
@@ -41,6 +41,7 @@
                 android:layout_height="23dp"
                 android:ellipsize="marquee"
                 android:maxLines="1"
+                android:text="歌曲名称"
                 android:textSize="17dp" />
 
             <TextView
@@ -50,6 +51,7 @@
                 android:ellipsize="end"
                 android:maxLength="20"
                 android:maxLines="1"
+                android:text="歌曲作者"
                 android:textSize="10dp" />
         </LinearLayout>
 

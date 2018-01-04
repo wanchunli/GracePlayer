@@ -22,7 +22,8 @@
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/bar_music"
-                android:background="@drawable/actionbar_disco"
+                android:src="@drawable/actionbar_disco"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true" />
 
             <ImageView
@@ -30,7 +31,8 @@
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:background="@drawable/actionbar_music"
+                android:src="@drawable/actionbar_music"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true" />
 
             <ImageView
@@ -51,6 +53,15 @@
                 android:scaleType="center" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
+
+    <com.wan.grace.graceplayer.widget.CustomViewPager
+        android:id="@+id/custom_viewpager"
+        android:layout_above="@+id/bottom_container"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.wan.grace.graceplayer.widget.CustomViewPager>
 
     <FrameLayout
         android:id="@+id/bottom_container"
