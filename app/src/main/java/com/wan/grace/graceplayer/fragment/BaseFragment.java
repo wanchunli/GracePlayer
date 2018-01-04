@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by wm on 2016/3/17.
  */
 public class BaseFragment extends Fragment {
 
     public Activity mContext;
+    private CompositeSubscription mSubscriptions;
 
     @Override
     public void onAttach(Activity activity){
@@ -43,25 +47,16 @@ public class BaseFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void updateTrackInfo() {
-//
-//    }
-//
-//    @Override
-//    public void updateTime() {
-//
-//    }
-//
-//    @Override
-//    public void changeTheme() {
-//
-//    }
-//
-//    @Override
-//    public void reloadAdapter() {
-//
-//    }
+    protected Subscription subscribeEvents() {
+        return null;
+    }
 
+    protected void addSubscription(Subscription subscription) {
+        if (subscription == null) return;
+        if (mSubscriptions == null) {
+            mSubscriptions = new CompositeSubscription();
+        }
+        mSubscriptions.add(subscription);
+    }
 
 }
