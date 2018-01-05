@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -74,7 +75,11 @@ public class MainActivity extends MVPBaseActivity<MainView,MainPresenter> implem
                 splashScreen.removeSplashScreen();
             }
         }, 3000);
-        mPresenter.loadWeather(ac);
+//        mPresenter.loadWeather(ac);
+        String longitude = (String) ac.getBaiduLocation().getMap().get("longitude");
+        String latitude = (String) ac.getBaiduLocation().getMap().get("latitude");
+        String location = longitude + "," + latitude;
+        Log.i("location",location);
     }
 
     private void setToolBar() {
@@ -155,6 +160,7 @@ public class MainActivity extends MVPBaseActivity<MainView,MainPresenter> implem
         // handle item selection
         switch (item.getItemId()) {
             case android.R.id.home: //Menu icon
+                mPresenter.loadWeather(ac);
                 drawerLayout.openDrawer(Gravity.LEFT);
                 return true;
 
