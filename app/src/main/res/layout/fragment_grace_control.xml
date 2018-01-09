@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
     android:orientation="vertical"
+    android:background="#80FFFFFF"
     tools:context="com.wan.grace.graceplayer.fragment.GraceControlFragment">
 
     <LinearLayout
@@ -42,6 +43,7 @@
                 android:ellipsize="marquee"
                 android:maxLines="1"
                 android:text="歌曲名称"
+                android:textColor="@color/white"
                 android:textSize="17dp" />
 
             <TextView
@@ -52,6 +54,7 @@
                 android:maxLength="20"
                 android:maxLines="1"
                 android:text="歌曲作者"
+                android:textColor="@color/white"
                 android:textSize="10dp" />
         </LinearLayout>
 

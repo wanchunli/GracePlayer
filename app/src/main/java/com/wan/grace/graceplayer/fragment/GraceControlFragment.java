@@ -30,6 +30,7 @@ import com.wan.grace.graceplayer.source.AppRepository;
 import com.wan.grace.graceplayer.source.PreferenceManager;
 import com.wan.grace.graceplayer.utils.RxBus;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;

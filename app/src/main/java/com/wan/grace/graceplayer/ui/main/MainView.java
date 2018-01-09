@@ -7,5 +7,6 @@ import com.wan.grace.graceplayer.bean.WeatherInfo;
  */
 
 public interface MainView {
+    void setDate(String dateStr);
     void setViewRefresh(String date, String temperature, WeatherInfo.ResultsBean.WeatherDataBean weatherDataBean, boolean refresh);
 }

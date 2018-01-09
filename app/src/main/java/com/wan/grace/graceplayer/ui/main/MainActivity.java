@@ -12,14 +12,11 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.adapter.CustomViewPagerAdapter;
 import com.wan.grace.graceplayer.base.MVPBaseActivity;
@@ -58,6 +55,10 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
     private ImageView graceImage;
     private ImageView graceImageBg;
     private SuperTextView cornerSettingLayout;
+    private TextView mTvMonthFirst;
+    private TextView mTvMonthLast;
+    private TextView mTvDayFirst;
+    private TextView mTvDayLast;
 
     @Override
     protected int provideContentViewId() {
@@ -75,7 +76,6 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
         splashScreen.show(R.mipmap.loading_bg,
                 SplashScreen.SLIDE_LEFT);
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         initView();
         setToolBar();
         setViewPager();
@@ -86,11 +86,7 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
                 splashScreen.removeSplashScreen();
             }
         }, 3000);
-//        mPresenter.loadWeather(ac);
-        String longitude = (String) ac.getBaiduLocation().getMap().get("longitude");
-        String latitude = (String) ac.getBaiduLocation().getMap().get("latitude");
-        String location = longitude + "," + latitude;
-        Log.i("location", location);
+        mPresenter.loadWeather(ac);
     }
 
     private void setToolBar() {
@@ -117,6 +113,10 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
         graceImage = findViewById(R.id.grace_image);
         loadGraceBg(graceImage);
         cornerSettingLayout = findViewById(R.id.corner_setting);
+        mTvMonthFirst = (TextView) findViewById(R.id.mian_menu_month_first);
+        mTvMonthLast = (TextView) findViewById(R.id.mian_menu_month_last);
+        mTvDayFirst = (TextView) findViewById(R.id.mian_menu_day_first);
+        mTvDayLast = (TextView) findViewById(R.id.mian_menu_day_last);
 
     }
 
@@ -217,6 +217,19 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
     public void setViewRefresh(String date, String temperature, WeatherDataBean weatherDataBean, boolean refresh) {
         mTemperature.setText(temperature);
         setWeatherImage(weatherDataBean);
+        mPresenter.getDate();
+    }
+
+    @Override
+    public void setDate(String dateStr) {
+        char month_first = dateStr.charAt(0);
+        char month_last = dateStr.charAt(1);
+        char day_first = dateStr.charAt(3);
+        char day_last = dateStr.charAt(4);
+        setDateTextView(mTvMonthFirst,String.valueOf(month_first));
+        setDateTextView(mTvMonthLast,String.valueOf(month_last));
+        setDateTextView(mTvDayFirst,String.valueOf(day_first));
+        setDateTextView(mTvDayLast,String.valueOf(day_last));
     }
 
     @Override
@@ -230,6 +243,7 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
      */
     private void setWeatherImage(WeatherInfo.ResultsBean.WeatherDataBean weatherDataBean) {
         String weather = weatherDataBean.getWeather();
+        Log.i("weather", weather);
         if (weather.equals("晴")) {
             mweathericon.setBackgroundResource(R.drawable.w_qing_00);
         } else if (weather.equals("多云")) {
@@ -317,6 +331,43 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
         } else {
             return super.onKeyDown(keyCode, event);
         }
+    }
 
+    /**
+     * 功能：设置时间
+     */
+    private void setDateTextView(TextView tv,String num) {
+        switch (num){
+            case "0":
+                tv.setBackgroundResource(R.drawable.num_0);
+                break;
+            case "1":
+                tv.setBackgroundResource(R.drawable.num_1);
+                break;
+            case "2":
+                tv.setBackgroundResource(R.drawable.num_2);
+                break;
+            case "3":
+                tv.setBackgroundResource(R.drawable.num_3);
+                break;
+            case "4":
+                tv.setBackgroundResource(R.drawable.num_4);
+                break;
+            case "5":
+                tv.setBackgroundResource(R.drawable.num_5);
+                break;
+            case "6":
+                tv.setBackgroundResource(R.drawable.num_6);
+                break;
+            case "7":
+                tv.setBackgroundResource(R.drawable.num_7);
+                break;
+            case "8":
+                tv.setBackgroundResource(R.drawable.num_8);
+                break;
+            case "9":
+                tv.setBackgroundResource(R.drawable.num_9);
+                break;
+        }
     }
 }

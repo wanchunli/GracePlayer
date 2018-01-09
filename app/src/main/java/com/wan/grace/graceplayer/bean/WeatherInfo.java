@@ -208,4 +208,14 @@ public class WeatherInfo {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "WeatherInfo{" +
+                "error=" + error +
+                ", status='" + status + '\'' +
+                ", date='" + date + '\'' +
+                ", results=" + results +
+                '}';
+    }
 }

@@ -13,6 +13,8 @@ import com.wan.grace.graceplayer.bean.WeatherInfo;
 import com.wan.grace.graceplayer.bean.WeatherInfo.ResultsBean.WeatherDataBean;
 import com.wan.grace.graceplayer.manager.AppContext;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,11 +48,18 @@ public class MainPresenter extends BaseClazzPresenter<MainView> {
         }
     }
 
+    public void getDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd");
+        Date curDate = new Date(System.currentTimeMillis());//
+        mainView.setDate(formatter.format(curDate));
+    }
+
     public void loadWeather(AppContext ac) {
         String longitude = (String) ac.getBaiduLocation().getMap().get("longitude");
         String latitude = (String) ac.getBaiduLocation().getMap().get("latitude");
-        String location = longitude + "," + latitude;
-        Log.i("location",location);
+//        String location = longitude + "," + latitude;
+        String location = "113.8555210000,22.6334480000";
+        Log.i("location", location);
         mainView = getView();
         if (mainView != null) {
             mainApi.getDetailWeather(location)
@@ -72,18 +81,22 @@ public class MainPresenter extends BaseClazzPresenter<MainView> {
         String temperature = "";
         WeatherDataBean mWeatherDataBean = new WeatherDataBean();
         //加载温度
-        List<WeatherDataBean> weather_data = weatherInfo.getResults().get(0).getWeather_data();
-        for (int i = 0; i < weather_data.size(); i++) {
-            WeatherDataBean weatherDataBean = weather_data.get(i);
-            date = weatherDataBean.getDate();// "date": "周四 10月13日 (实时：14℃)",
-            if (date.contains("(")) {
-                String[] split = date.split("：");
-                temperature = split[1].substring(0, split[1].length() - 1);
-                //加载天气图片
-                mWeatherDataBean = weatherDataBean;
-                break;
+        Log.i("weatherInfo", weatherInfo.toString());
+        if (weatherInfo != null) {
+            List<WeatherDataBean> weather_data = weatherInfo.getResults().get(0).getWeather_data();
+            for (int i = 0; i < weather_data.size(); i++) {
+                WeatherDataBean weatherDataBean = weather_data.get(i);
+                date = weatherDataBean.getDate();// "date": "周四 10月13日 (实时：14℃)",
+                if (date.contains("(")) {
+                    String[] split = date.split("：");
+                    temperature = split[1].substring(0, split[1].length() - 1);
+                    //加载天气图片
+                    mWeatherDataBean = weatherDataBean;
+                    break;
+                }
             }
         }
+        Log.i("date", date);
         mainView.setViewRefresh(date, temperature, mWeatherDataBean, true);
     }
 
