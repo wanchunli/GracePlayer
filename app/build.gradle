@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.wan.grace.graceplayer"
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -49,12 +49,18 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.jakewharton:butterknife:8.4.0'
-    //    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+//    classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+//    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     implementation files('libs/lite-orm-1.9.2.jar')
     compile 'com.github.promeg:tinypinyin:1.0.0'
     implementation project(':superTextlibrary')
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.larswerkman:HoloColorPicker:1.5'
     implementation files('libs/BaiduLBS_Android.jar')
+
+//    annotationProcessor "com.github.bumptech.glide:compiler:4.0.0"
+    //高斯模糊
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }

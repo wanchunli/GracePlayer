@@ -13,4 +13,5 @@ public interface IConstants {
     int START_FROM_LOCAL = 3;
     int START_FROM_FOLDER = 4;
     int START_FROM_FAVORITE = 5;
+
 }

@@ -13,8 +13,10 @@
         <item name="android:actionOverflowButtonStyle">@style/MyOverflowStyle</item>
         <!-- Customize your theme here. -->
         <item name="alertDialogTheme">@style/AppTheme.Dialog.Alert</item>
-        <item name="android:windowBackground">@null</item>
+        <!--<item name="android:windowBackground">@null</item>-->
         <item name="android:windowAnimationStyle">@style/NoAnimation</item>
+        <item name="android:windowBackground">@color/window_bg_gray</item>
+        <item name="windowNoTitle">true</item>
         <!--导航栏的颜色-->
 
 
@@ -218,6 +220,15 @@
         <item name="android:windowMinWidthMinor">90%</item>
         <item name="android:windowMinWidthMajor">90%</item>
         <item name="android:maxWidth">1080px</item>
+    </style>
+
+    <style name="AppCornerTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/window_bg_gray</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>

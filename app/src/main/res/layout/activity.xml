@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/toolbarTextColor">
+    android:layout_height="match_parent">
+
+    <!--android:background="@color/toolbarTextColor"-->
+
+    <ImageView
+        android:id="@+id/grace_image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_color_primary"
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize">
+
+        <!--android:background="@color/theme_color_primary"-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,18 +30,18 @@
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/bar_music"
-                android:src="@drawable/actionbar_disco"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true" />
+                android:clickable="true"
+                android:src="@drawable/actionbar_disco" />
 
             <ImageView
                 android:id="@+id/bar_music"
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:src="@drawable/actionbar_music"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true" />
+                android:clickable="true"
+                android:src="@drawable/actionbar_music" />
 
             <ImageView
                 android:id="@+id/bar_friends"
@@ -56,10 +64,10 @@
 
     <com.wan.grace.graceplayer.widget.CustomViewPager
         android:id="@+id/custom_viewpager"
-        android:layout_above="@+id/bottom_container"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_container"
+        android:layout_below="@+id/toolbar">
 
     </com.wan.grace.graceplayer.widget.CustomViewPager>
 

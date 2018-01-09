@@ -5,11 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.allen.library.SuperTextView;
-import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.bean.Song;
-import com.wan.grace.graceplayer.info.MusicInfo;
 import com.wan.grace.graceplayer.utils.CommonViewHolder;
 
 import java.util.List;
@@ -38,14 +35,14 @@ public class LocalMusicAdapter extends BaseAdapter<Song> {
     @Override
     public void onBindViewHolder(CommonViewHolder commonViewHolder, final int position) {
         super.onBindViewHolder(commonViewHolder, position);
-        List<Song> list = getList();
-        Song song = list.get(position);
         if (getItemViewType(position) == FIRST_ITEM) {
             SuperTextView superTextView = commonViewHolder.getView(R.id.super_texttopview);
             superTextView.getLeftIconIV().setImageDrawable(
                     context.getResources().getDrawable(R.drawable.all_song));
-            superTextView.setLeftString("播放全部(共" + list.size() + "首)");
+            superTextView.setLeftString("播放全部(共" + getList().size() + "首)");
         } else {
+            List<Song> list = getList();
+            Song song = list.get(position);
             SuperTextView superTextView = commonViewHolder.getView(R.id.super_textview);
 //            Picasso.with(context).load(musicInfo.albumData)
 //                    .placeholder(R.drawable.grace_logo)

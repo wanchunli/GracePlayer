@@ -1,5 +1,6 @@
 package com.wan.grace.graceplayer.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import com.wan.grace.graceplayer.adapter.LocalMusicAdapter;
 import com.wan.grace.graceplayer.bean.PlayList;
 import com.wan.grace.graceplayer.bean.Song;
 import com.wan.grace.graceplayer.event.PlaySongEvent;
+import com.wan.grace.graceplayer.manager.Constants;
 import com.wan.grace.graceplayer.music.MusicPlayerContract;
 import com.wan.grace.graceplayer.music.MusicPlayerPresenter;
 import com.wan.grace.graceplayer.player.IPlayback;
@@ -74,7 +76,11 @@ public class MainFragment extends BaseFragment implements MusicPlayerContract.Vi
         recyclerView.setAdapter(musicAdapter);
         recyclerView.setHasFixedSize(true);
         setItemDecoration();
-        reloadAdapter();
+        if(hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            reloadAdapter();
+        }else{
+            requestPersions(Constants.READ_EXTERNAL_CODE,Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
         musicAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
