@@ -28,6 +28,7 @@ import com.wan.grace.graceplayer.player.PlayMode;
 import com.wan.grace.graceplayer.player.PlaybackService;
 import com.wan.grace.graceplayer.source.AppRepository;
 import com.wan.grace.graceplayer.source.PreferenceManager;
+import com.wan.grace.graceplayer.ui.main.MainActivity;
 import com.wan.grace.graceplayer.utils.RxBus;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -47,6 +48,7 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
     private ProgressBar mProgress;
     // Update seek bar every second
     private static final long UPDATE_PROGRESS_INTERVAL = 1000;
+    private ImageView mControlBg;
     private ImageView mPlayPause;
     private TextView mTitle;
     private TextView mArtist;
@@ -83,6 +85,8 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_grace_control, container, false);
         this.rootView = rootView;
+        mControlBg = rootView.findViewById(R.id.grace_control_image);
+        loadGraceBg(mControlBg);
         mPlayPause = (ImageView) rootView.findViewById(R.id.control);
         mProgress = (ProgressBar) rootView.findViewById(R.id.song_progress_normal);
         mTitle = (TextView) rootView.findViewById(R.id.playbar_info);
@@ -113,6 +117,16 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
         });
         new MusicPlayerPresenter(getActivity(), AppRepository.getInstance(), this).subscribe();
         return rootView;
+    }
+
+    private void loadGraceBg(ImageView graceImage) {
+        Glide.with(getActivity())
+                .load("file:///android_asset/loading_bg.jpg")
+                .error(R.drawable.me)
+                .placeholder(R.drawable.me)
+                .crossFade(1000)
+                .bitmapTransform(new BlurTransformation(getActivity(), 15, 3))
+                .into(graceImage);
     }
 
     private IPlayback mPlayer;
