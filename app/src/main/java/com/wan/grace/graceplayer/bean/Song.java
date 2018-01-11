@@ -40,6 +40,9 @@ public class Song implements Parcelable {
 
     private boolean isPlaying = false;
 
+    // 歌曲类型:本地/网络
+    private Type type;
+
     public Song() {
         // Empty
     }
@@ -126,6 +129,19 @@ public class Song implements Parcelable {
 
     public void setPlaying(boolean playing) {
         isPlaying = playing;
+    }
+
+    public enum Type {
+        LOCAL,
+        ONLINE
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override

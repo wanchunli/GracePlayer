@@ -82,6 +82,7 @@ public class MainPresenter extends BaseClazzPresenter<MainView> {
         WeatherDataBean mWeatherDataBean = new WeatherDataBean();
         //加载温度
         Log.i("weatherInfo", weatherInfo.toString());
+//        WeatherInfo.ResultsBean resultsBean = weatherInfo.getResults().get(0);
         if (weatherInfo != null) {
             List<WeatherDataBean> weather_data = weatherInfo.getResults().get(0).getWeather_data();
             for (int i = 0; i < weather_data.size(); i++) {

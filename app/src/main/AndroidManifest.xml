@@ -3,8 +3,7 @@
     package="com.wan.grace.graceplayer">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -57,7 +56,10 @@
         </service>
         <service android:name=".service.KeepCornerLiveService" />
 
-        <activity android:name=".ui.RoundCornerActivity"></activity>
+        <activity android:name=".ui.RoundCornerActivity" />
+        <activity android:name=".ui.play.PlayActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

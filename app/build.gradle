@@ -63,4 +63,5 @@ dependencies {
 //    annotationProcessor "com.github.bumptech.glide:compiler:4.0.0"
     //高斯模糊
     compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile 'me.wcy:lrcview:2.0.0'
 }

@@ -1,6 +1,10 @@
 package com.wan.grace.graceplayer.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +25,7 @@ import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.bean.PlayList;
 import com.wan.grace.graceplayer.bean.Song;
 import com.wan.grace.graceplayer.event.PlaySongEvent;
+import com.wan.grace.graceplayer.manager.AppContext;
 import com.wan.grace.graceplayer.music.MusicPlayerContract;
 import com.wan.grace.graceplayer.music.MusicPlayerPresenter;
 import com.wan.grace.graceplayer.player.IPlayback;
@@ -29,6 +34,8 @@ import com.wan.grace.graceplayer.player.PlaybackService;
 import com.wan.grace.graceplayer.source.AppRepository;
 import com.wan.grace.graceplayer.source.PreferenceManager;
 import com.wan.grace.graceplayer.ui.main.MainActivity;
+import com.wan.grace.graceplayer.ui.play.PlayActivity;
+import com.wan.grace.graceplayer.utils.BlurUtils;
 import com.wan.grace.graceplayer.utils.RxBus;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -86,7 +93,13 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
         View rootView = inflater.inflate(R.layout.fragment_grace_control, container, false);
         this.rootView = rootView;
         mControlBg = rootView.findViewById(R.id.grace_control_image);
-        loadGraceBg(mControlBg);
+//        String filePath="file:///android_asset/loading_bg.jpg";
+        Resources r = this.getContext().getResources();
+        Bitmap bitmap=BitmapFactory.decodeResource(r, R.mipmap.loading_bg);
+//        Bitmap bitmap= BitmapFactory.decodeFile(filePath);
+        Bitmap newBitmap = BlurUtils.fastblur(bitmap,16);
+        mControlBg.setImageBitmap(newBitmap);
+//        loadGraceBg(mControlBg);
         mPlayPause = (ImageView) rootView.findViewById(R.id.control);
         mProgress = (ProgressBar) rootView.findViewById(R.id.song_progress_normal);
         mTitle = (TextView) rootView.findViewById(R.id.playbar_info);
@@ -113,6 +126,14 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "队列", Toast.LENGTH_LONG).show();
+            }
+        });
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppContext.getInstance(), PlayActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                AppContext.getInstance().startActivity(intent);
             }
         });
         new MusicPlayerPresenter(getActivity(), AppRepository.getInstance(), this).subscribe();

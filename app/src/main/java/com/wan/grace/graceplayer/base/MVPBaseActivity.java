@@ -3,6 +3,8 @@ package com.wan.grace.graceplayer.base;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -34,6 +36,7 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
     protected Toolbar mToolbar;
     private GraceControlFragment fragment; //底部播放控制栏
     private String TAG = "BaseActivity";
+    protected Handler mBackHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,13 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * 为子类提供监听事件的方法
+     */
+    public void setListener(){
+
     }
 
     /**
