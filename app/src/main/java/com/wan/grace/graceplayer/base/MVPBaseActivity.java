@@ -37,6 +37,7 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
     private GraceControlFragment fragment; //底部播放控制栏
     private String TAG = "BaseActivity";
     protected Handler mBackHandler = new Handler(Looper.getMainLooper());
+    protected Handler mMusicDelayHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

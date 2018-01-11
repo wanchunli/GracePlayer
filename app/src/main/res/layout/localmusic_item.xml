@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.allen.library.SuperTextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:stv="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/super_textview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/song_content_layout"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="#80000000"
-    stv:sLeftBottomTextSize="12sp"
-    stv:sLeftTextColor="@android:color/black"
-    stv:sLeftTopTextSize="16sp"
-    stv:sLeftTvDrawableHeight="50dp"
-    stv:sLeftTvDrawableWidth="50dp"
-    stv:sLeftViewGravity="left_center">
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingLeft="20dp">
 
-    <!--android:background="@color/normalBackground"-->
+    <TextView
+        android:id="@+id/tv_songname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textSize="16sp" />
 
-</com.allen.library.SuperTextView>
+    <TextView
+        android:id="@+id/tv_songartist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textSize="12sp" />
+
+</LinearLayout>

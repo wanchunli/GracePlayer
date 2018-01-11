@@ -57,7 +57,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private TextView tvTitle;
     //    @BindView(R.id.tv_artist)
     private TextView tvArtist;
-//    @BindView(R.id.vp_play_page)
+    //    @BindView(R.id.vp_play_page)
     private ViewPager vpPlay;
     //    @BindView(R.id.il_indicator)
     private IndicatorLayout ilIndicator;
@@ -88,7 +88,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private Runnable mProgressCallback = new Runnable() {
         @Override
         public void run() {
-            if (mPlayer.isPlaying()) {
+            if (mPlayer != null && mPlayer.isPlaying()) {
                 int progress = (int) (sbProgress.getMax()
                         * ((float) mPlayer.getProgress() / (float) getCurrentSongDuration()));
                 updateProgressTextWithDuration(mPlayer.getProgress());
@@ -261,24 +261,30 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_back:
-                onBackPressed();
-                break;
-            case R.id.iv_mode:
-                switchPlayMode();
-                break;
-            case R.id.iv_play:
-                onPlayAction();
-                ivPlay.setSelected(mPlayer.isPlaying());
-                break;
-            case R.id.iv_next:
-                onPlayNextAction();
-                break;
-            case R.id.iv_prev:
-                onLastPlayAction();
-                break;
-        }
+        mMusicDelayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (v.getId()) {
+                    case R.id.iv_back:
+                        onBackPressed();
+                        break;
+                    case R.id.iv_mode:
+                        switchPlayMode();
+                        break;
+                    case R.id.iv_play:
+                        onPlayAction();
+                        ivPlay.setSelected(mPlayer.isPlaying());
+                        break;
+                    case R.id.iv_next:
+                        onPlayNextAction();
+                        break;
+                    case R.id.iv_prev:
+                        onLastPlayAction();
+
+                        break;
+                }
+            }
+        }, 500);
     }
 
     @Override

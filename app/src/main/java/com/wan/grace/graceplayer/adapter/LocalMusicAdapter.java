@@ -3,6 +3,8 @@ package com.wan.grace.graceplayer.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.allen.library.SuperTextView;
 import com.wan.grace.graceplayer.R;
@@ -36,20 +38,17 @@ public class LocalMusicAdapter extends BaseAdapter<Song> {
     public void onBindViewHolder(CommonViewHolder commonViewHolder, final int position) {
         super.onBindViewHolder(commonViewHolder, position);
         if (getItemViewType(position) == FIRST_ITEM) {
-            SuperTextView superTextView = commonViewHolder.getView(R.id.super_texttopview);
-            superTextView.getLeftIconIV().setImageDrawable(
-                    context.getResources().getDrawable(R.drawable.all_song));
-            superTextView.setLeftString("播放全部(共" + getList().size() + "首)");
+            TextView tvContent = commonViewHolder.getView(R.id.tv_content);
+            tvContent.setText("播放全部(共" + getList().size() + "首)");
         } else {
             List<Song> list = getList();
             Song song = list.get(position);
-            SuperTextView superTextView = commonViewHolder.getView(R.id.super_textview);
-//            Picasso.with(context).load(musicInfo.albumData)
-//                    .placeholder(R.drawable.grace_logo)
-//                    .into(superTextView.getLeftIconIV());
-            superTextView.setLeftTopString(song.getDisplayName());
-            superTextView.setLeftBottomString(song.getArtist());
-            superTextView.setOnClickListener(new View.OnClickListener() {
+            LinearLayout songContentLayout = commonViewHolder.getView(R.id.song_content_layout);
+            TextView tvSongName = commonViewHolder.getView(R.id.tv_songname);
+            TextView tvSongArtist = commonViewHolder.getView(R.id.tv_songartist);
+            tvSongName.setText(song.getDisplayName());
+            tvSongArtist.setText(song.getArtist());
+            songContentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (getOnItemClickListener() != null) {
