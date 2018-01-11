@@ -24,7 +24,7 @@ public enum PlayMode {
     }
 
     public static PlayMode getMode(int code) {
-        switch(code){
+        switch (code) {
             case 0:
                 return LOOP;
             case 1:
@@ -56,6 +56,23 @@ public enum PlayMode {
     public int getValue() {
         return value;
     }
+
+    public int getValue(PlayMode current) {
+        if (current == null) return 0;
+
+        switch (current) {
+            case LOOP:
+                return 0;
+            case SHUFFLE:
+                return 1;
+            case SINGLE:
+                return 2;
+            case LIST:
+                return 3;
+        }
+        return 0;
+    }
+
 
     public void setValue(int value) {
         this.value = value;

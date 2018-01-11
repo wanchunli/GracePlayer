@@ -9,18 +9,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.wan.grace.graceplayer.R;
+import com.wan.grace.graceplayer.adapter.PlayPagerAdapter;
 import com.wan.grace.graceplayer.base.MVPBaseActivity;
 import com.wan.grace.graceplayer.bean.Song;
 import com.wan.grace.graceplayer.music.MusicPlayerContract;
+import com.wan.grace.graceplayer.music.MusicPlayerPresenter;
 import com.wan.grace.graceplayer.player.IPlayback;
 import com.wan.grace.graceplayer.player.PlayMode;
 import com.wan.grace.graceplayer.player.PlaybackService;
+import com.wan.grace.graceplayer.source.AppRepository;
 import com.wan.grace.graceplayer.source.PreferenceManager;
 import com.wan.grace.graceplayer.utils.SystemUtils;
 import com.wan.grace.graceplayer.utils.TimeUtils;
@@ -28,14 +34,16 @@ import com.wan.grace.graceplayer.widget.AlbumCoverView;
 import com.wan.grace.graceplayer.widget.IndicatorLayout;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import me.wcy.lrcview.LrcView;
 
-public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> implements PlayView, View.OnClickListener,
+public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> implements
+        MusicPlayerContract.View, IPlayback.Callback, PlayView, View.OnClickListener,
         ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener
-        , LrcView.OnPlayClickListener, MusicPlayerContract.View, IPlayback.Callback {
+        , LrcView.OnPlayClickListener {
 
     // Update seek bar every second
     private static final long UPDATE_PROGRESS_INTERVAL = 1000;
@@ -49,7 +57,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private TextView tvTitle;
     //    @BindView(R.id.tv_artist)
     private TextView tvArtist;
-    @BindView(R.id.vp_play_page)
+//    @BindView(R.id.vp_play_page)
     private ViewPager vpPlay;
     //    @BindView(R.id.il_indicator)
     private IndicatorLayout ilIndicator;
@@ -130,14 +138,19 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        initViewPager();
+        showQuickControl(false);
+        new MusicPlayerPresenter(PlayActivity.this, AppRepository.getInstance(), this).subscribe();
         initView();
-//        ilIndicator.create(mViewPagerContent.size());
+//        initViewPager();
+//      ilIndicator.create(mViewPagerContent.size());
         initPlayMode();
-//        onChangeImpl(mPlayer.getPlayingSong());
+        if (mPlayer != null) {
+            onChangeImpl(mPlayer.getPlayingSong());
+        }
+
     }
 
-    private void initView() {
+    public void initView() {
         ivBack = findViewById(R.id.iv_back);
         tvTitle = findViewById(R.id.tv_title);
         tvArtist = findViewById(R.id.tv_artist);
@@ -149,6 +162,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         ivNext = findViewById(R.id.iv_next);
         ivPrev = findViewById(R.id.iv_prev);
         ivMode = findViewById(R.id.iv_mode);
+        setListener();
     }
 
     private int getDuration(int progress) {
@@ -186,21 +200,24 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         setLrc(song);
         if (mPlayer.isPlaying()) {
             ivPlay.setSelected(true);
-            mAlbumCoverView.start();
+//            mAlbumCoverView.start();
         } else {
             ivPlay.setSelected(false);
-            mAlbumCoverView.pause();
+//            mAlbumCoverView.pause();
         }
     }
 
 //    private void initViewPager() {
+//        vpPlay = findViewById(R.id.vp_play_page);
 //        View coverView = LayoutInflater.from(this).inflate(R.layout.fragment_play_page_cover, null);
 //        View lrcView = LayoutInflater.from(this).inflate(R.layout.fragment_play_page_lrc, null);
 //        mAlbumCoverView = (AlbumCoverView) coverView.findViewById(R.id.album_cover_view);
 //        mLrcViewSingle = (LrcView) coverView.findViewById(R.id.lrc_view_single);
 //        mLrcViewFull = (LrcView) lrcView.findViewById(R.id.lrc_view_full);
 //        sbVolume = (SeekBar) lrcView.findViewById(R.id.sb_volume);
-//        mAlbumCoverView.initNeedle(mPlayer.isPlaying());
+//        if(mPlayer!=null) {
+//            mAlbumCoverView.initNeedle(mPlayer.isPlaying());
+//        }
 //        mLrcViewFull.setOnPlayClickListener(this);
 //        initVolume();
 //
@@ -216,16 +233,15 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         sbVolume.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
     }
 
-    @Override
-    public void setListener() {
+    private void setListener() {
         ivBack.setOnClickListener(this);
         ivMode.setOnClickListener(this);
         ivPlay.setOnClickListener(this);
         ivPrev.setOnClickListener(this);
         ivNext.setOnClickListener(this);
         sbProgress.setOnSeekBarChangeListener(this);
-        sbVolume.setOnSeekBarChangeListener(this);
-        vpPlay.addOnPageChangeListener(this);
+//        sbVolume.setOnSeekBarChangeListener(this);
+//        vpPlay.addOnPageChangeListener(this);
     }
 
     @Override
@@ -254,6 +270,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
                 break;
             case R.id.iv_play:
                 onPlayAction();
+                ivPlay.setSelected(mPlayer.isPlaying());
                 break;
             case R.id.iv_next:
                 onPlayNextAction();
@@ -271,11 +288,15 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
                 tvCurrentTime.setText(formatTime(progress));
                 mLastProgress = progress;
             }
+            if (fromUser) {
+                updateProgressTextWithDuration(progress);
+            }
         }
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(mProgressCallback);
         if (seekBar == sbProgress) {
             isDraggingProgress = true;
         }
@@ -285,17 +306,22 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (seekBar == sbProgress) {
             isDraggingProgress = false;
-            if (mPlayer.isPlaying() || mPlayer.pause()) {
-                int progress = seekBar.getProgress();
-                mPlayer.seekTo(progress);
-
-                if (mLrcViewSingle.hasLrc()) {
-                    mLrcViewSingle.updateTime(progress);
-                    mLrcViewFull.updateTime(progress);
-                }
-            } else {
-                seekBar.setProgress(0);
+            seekTo(getDuration(seekBar.getProgress()));
+            if (mPlayer.isPlaying()) {
+                mHandler.removeCallbacks(mProgressCallback);
+                mHandler.post(mProgressCallback);
             }
+//            if (mPlayer.isPlaying() || mPlayer.pause()) {
+//                int progress = seekBar.getProgress();
+//                mPlayer.seekTo(progress);
+//
+//                if (mLrcViewSingle.hasLrc()) {
+//                    mLrcViewSingle.updateTime(progress);
+//                    mLrcViewFull.updateTime(progress);
+//                }
+//            } else {
+//                seekBar.setProgress(0);
+//            }
         } else if (seekBar == sbVolume) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, seekBar.getProgress(),
                     AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
@@ -323,7 +349,9 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
 
     @Override
     protected void onDestroy() {
-        mPlayPresenter.unsubscribe();
+        if (mPlayPresenter != null) {
+            mPlayPresenter.unsubscribe();
+        }
         super.onDestroy();
     }
 
@@ -331,6 +359,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     public void onPlaybackServiceBound(PlaybackService service) {
         mPlayer = service;
         mPlayer.registerCallback(this);
+        onChangeImpl(mPlayer.getPlayingSong());
     }
 
     @Override
@@ -353,6 +382,8 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
             return;
         }
         // Step 1: Song name and artist
+        tvTitle.setText(song.getDisplayName());
+        tvArtist.setText(song.getArtist());
         // Step 2: favorite
 //        buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
         // Step 3: Duration
@@ -360,9 +391,6 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         // Step 4: Keep these things updated
         // - Album rotation
         // - Progress(textViewProgress & seekBarProgress)
-        if (mPlayer.isPlaying()) {
-            ivPlay.setSelected(true);
-        }
         mHandler.removeCallbacks(mProgressCallback);
         if (mPlayer.isPlaying()) {
             mHandler.post(mProgressCallback);
@@ -393,7 +421,6 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
                 break;
         }
         PreferenceManager.setPlayMode(PlayActivity.this, playMode);
-        ivMode.setImageLevel(playMode.getValue());
     }
 
     private void switchPlayMode() {
@@ -402,6 +429,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         PreferenceManager.setPlayMode(PlayActivity.this, newMode);
         mPlayer.setPlayMode(newMode);
         updatePlayMode(newMode);
+        initPlayMode();
     }
 
     @Override
@@ -440,7 +468,13 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
 
     @Override
     public void onPlayStatusChanged(boolean isPlaying) {
-
+        updatePlayToggle(isPlaying);
+        if (isPlaying) {
+            mHandler.removeCallbacks(mProgressCallback);
+            mHandler.post(mProgressCallback);
+        } else {
+            mHandler.removeCallbacks(mProgressCallback);
+        }
     }
 
     public void onPlayNextAction() {
@@ -544,6 +578,5 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private String formatTime(long time) {
         return SystemUtils.formatTime("mm:ss", time);
     }
-
 
 }

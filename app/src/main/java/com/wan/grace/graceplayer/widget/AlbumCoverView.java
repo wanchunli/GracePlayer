@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.wan.grace.graceplayer.R;
+import com.wan.grace.graceplayer.utils.CoverLoader;
 import com.wan.grace.graceplayer.utils.ImageUtils;
 
 /**
@@ -70,7 +71,7 @@ public class AlbumCoverView extends View implements ValueAnimator.AnimatorUpdate
         mDiscBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play_page_disc);
         mDiscBitmap = ImageUtils.resizeImage(mDiscBitmap, (int) (getScreenWidth() * 0.75),
                 (int) (getScreenWidth() * 0.75));
-//        mCoverBitmap = CoverLoader.getInstance().loadRound(null);
+        mCoverBitmap = CoverLoader.getInstance().loadRound(null);
         mNeedleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play_page_needle);
         mNeedleBitmap = ImageUtils.resizeImage(mNeedleBitmap, (int) (getScreenWidth() * 0.25),
                 (int) (getScreenWidth() * 0.375));

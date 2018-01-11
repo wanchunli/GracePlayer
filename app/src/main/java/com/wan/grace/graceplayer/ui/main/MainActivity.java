@@ -76,6 +76,7 @@ public class MainActivity extends MVPBaseActivity<MainView, MainPresenter> imple
         splashScreen.show(R.mipmap.loading_bg,
                 SplashScreen.SLIDE_LEFT);
         super.onCreate(savedInstanceState);
+        showQuickControl(true);
         initView();
         setToolBar();
         setViewPager();

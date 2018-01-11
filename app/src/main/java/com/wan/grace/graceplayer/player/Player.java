@@ -110,6 +110,7 @@ public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
         isPaused = false;
         mPlayList.getSongs().clear();
         mPlayList.getSongs().add(song);
+//        PreferenceManager.
         return play();
     }
 

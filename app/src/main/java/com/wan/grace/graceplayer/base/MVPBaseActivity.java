@@ -43,7 +43,6 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         //允许为空，不是所有都要实现MVP模式
-        showQuickControl(true);
         if (createPresenter() != null) {
             mPresenter = createPresenter();
             mPresenter.attachView((V) this);
@@ -79,13 +78,6 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    /**
-     * 为子类提供监听事件的方法
-     */
-    public void setListener(){
-
     }
 
     /**

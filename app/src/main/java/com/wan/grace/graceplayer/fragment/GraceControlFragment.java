@@ -137,6 +137,7 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
             }
         });
         new MusicPlayerPresenter(getActivity(), AppRepository.getInstance(), this).subscribe();
+
         return rootView;
     }
 

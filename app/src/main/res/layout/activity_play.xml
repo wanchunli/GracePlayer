@@ -75,4 +75,12 @@
 
         <include layout="@layout/include_play_page_controller" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true" />
+
 </FrameLayout>

@@ -1,85 +1,88 @@
-//package com.wan.grace.graceplayer.utils;
-//
-//import android.content.ContentResolver;
-//import android.content.Context;
-//import android.graphics.Bitmap;
-//import android.graphics.BitmapFactory;
-//import android.net.Uri;
-//import android.os.Build;
-//import android.support.v4.util.LruCache;
-//import android.text.TextUtils;
-//
-//import com.wan.grace.graceplayer.R;
-//import com.wan.grace.graceplayer.bean.Song;
-//
-//import java.io.FileNotFoundException;
-//import java.io.InputStream;
-//
-///**
-// * 专辑封面图片加载器
-// * Created by wcy on 2015/11/27.
-// */
-//public class CoverLoader {
-//    public static final int THUMBNAIL_MAX_LENGTH = 500;
-//    private static final String KEY_NULL = "null";
-//
-//    // 封面缓存
-//    private LruCache<String, Bitmap> mCoverCache;
-//    private Context mContext;
-//
-//    private enum Type {
-//        THUMBNAIL(""),
-//        BLUR("#BLUR"),
-//        ROUND("#ROUND");
-//
-//        private String value;
-//
-//        Type(String value) {
-//            this.value = value;
-//        }
-//    }
-//
-//    public static CoverLoader getInstance() {
-//        return SingletonHolder.instance;
-//    }
-//
-//    private static class SingletonHolder {
-//        private static CoverLoader instance = new CoverLoader();
-//    }
-//
-//    private CoverLoader() {
-//        // 获取当前进程的可用内存（单位KB）
-//        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-//        // 缓存大小为当前进程可用内存的1/8
-//        int cacheSize = maxMemory / 8;
-//        mCoverCache = new LruCache<String, Bitmap>(cacheSize) {
-//            @Override
-//            protected int sizeOf(String key, Bitmap bitmap) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                    return bitmap.getAllocationByteCount() / 1024;
-//                } else {
-//                    return bitmap.getByteCount() / 1024;
-//                }
-//            }
-//        };
-//    }
-//
-//    public void init(Context context) {
-//        mContext = context.getApplicationContext();
-//    }
-//
-//    public Bitmap loadThumbnail(Song music) {
+package com.wan.grace.graceplayer.utils;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.util.LruCache;
+import android.text.TextUtils;
+
+import com.wan.grace.graceplayer.R;
+import com.wan.grace.graceplayer.bean.Song;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+/**
+ * 专辑封面图片加载器
+ * Created by wcy on 2015/11/27.
+ */
+public class CoverLoader {
+    public static final int THUMBNAIL_MAX_LENGTH = 500;
+    private static final String KEY_NULL = "null";
+
+    // 封面缓存
+    private LruCache<String, Bitmap> mCoverCache;
+    private Context mContext;
+
+    private enum Type {
+        THUMBNAIL(""),
+        BLUR("#BLUR"),
+        ROUND("#ROUND");
+
+        private String value;
+
+        Type(String value) {
+            this.value = value;
+        }
+    }
+
+    public static CoverLoader getInstance() {
+        return SingletonHolder.instance;
+    }
+
+    private static class SingletonHolder {
+        private static CoverLoader instance = new CoverLoader();
+    }
+
+    private CoverLoader() {
+        // 获取当前进程的可用内存（单位KB）
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        // 缓存大小为当前进程可用内存的1/8
+        int cacheSize = maxMemory / 8;
+        mCoverCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    return bitmap.getAllocationByteCount() / 1024;
+                } else {
+                    return bitmap.getByteCount() / 1024;
+                }
+            }
+        };
+    }
+
+    public void init(Context context) {
+        mContext = context.getApplicationContext();
+    }
+
+    public Bitmap loadThumbnail(Song music) {
 //        return loadCover(music, Type.THUMBNAIL);
-//    }
-//
-//    public Bitmap loadBlur(Song music) {
+        return null;
+    }
+
+    public Bitmap loadBlur(Song music) {
 //        return loadCover(music, Type.BLUR);
-//    }
-//
-//    public Bitmap loadRound(Song music) {
+        return null;
+    }
+
+    public Bitmap loadRound(Song music) {
 //        return loadCover(music, Type.ROUND);
-//    }
-//
+        return null;
+    }
+
 //    private Bitmap loadCover(Song music, Type type) {
 //        Bitmap bitmap;
 //        String key = getKey(music, type);
@@ -107,21 +110,21 @@
 //
 //        return loadCover(null, type);
 //    }
-//
-//    private String getKey(Song music, Type type) {
-//        if (music == null) {
+
+//    private String getKey(Song song, Type type) {
+//        if (song == null) {
 //            return null;
 //        }
 //
-//        if (music.getType() == Music.Type.LOCAL && music.getAlbumId() > 0) {
-//            return String.valueOf(music.getAlbumId()).concat(type.value);
-//        } else if (music.getType() == Music.Type.ONLINE && !TextUtils.isEmpty(music.getCoverPath())) {
-//            return music.getCoverPath().concat(type.value);
+//        if (song.getType() == Song.Type.LOCAL && song.getId() > 0) {
+//            return String.valueOf(song.getAlbumId()).concat(type.value);
+//        } else if (song.getType() == Song.Type.ONLINE && !TextUtils.isEmpty(song.getCoverPath())) {
+//            return song.getCoverPath().concat(type.value);
 //        } else {
 //            return null;
 //        }
 //    }
-//
+
 //    private Bitmap getDefaultCover(Type type) {
 //        switch (type) {
 //            case BLUR:
@@ -134,7 +137,7 @@
 //                return BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_cover);
 //        }
 //    }
-//
+
 //    private Bitmap loadCoverByType(Song music, Type type) {
 //        Bitmap bitmap;
 //        if (music.getType() == Music.Type.LOCAL) {
@@ -153,11 +156,11 @@
 //                return bitmap;
 //        }
 //    }
-//
-//    /**
-//     * 从媒体库加载封面<br>
-//     * 本地音乐
-//     */
+
+    /**
+     * 从媒体库加载封面<br>
+     * 本地音乐
+     */
 //    private Bitmap loadCoverFromMediaStore(long albumId) {
 //        ContentResolver resolver = mContext.getContentResolver();
 //        Uri uri = MusicUtils.getMediaStoreAlbumCoverUri(albumId);
@@ -172,14 +175,14 @@
 //        options.inPreferredConfig = Bitmap.Config.RGB_565;
 //        return BitmapFactory.decodeStream(is, null, options);
 //    }
-//
-//    /**
-//     * 从下载的图片加载封面<br>
-//     * 网络音乐
-//     */
-//    private Bitmap loadCoverFromFile(String path) {
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//        return BitmapFactory.decodeFile(path, options);
-//    }
-//}
+
+    /**
+     * 从下载的图片加载封面<br>
+     * 网络音乐
+     */
+    private Bitmap loadCoverFromFile(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeFile(path, options);
+    }
+}
