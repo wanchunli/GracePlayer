@@ -1,16 +1,15 @@
-package com.wan.grace.graceplayer.fragment;
+package com.wan.grace.graceplayer.fragment.netplay;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.wan.grace.graceplayer.R;
+import com.wan.grace.graceplayer.base.MVPBaseFragment;
 
-public class NetPlayerFragment extends Fragment {
+public class NetPlayerFragment extends MVPBaseFragment<NetPlayView,NetPlayPresenter>
+        implements NetPlayView{
 
     public NetPlayerFragment() {
         // Required empty public constructor
@@ -32,14 +31,22 @@ public class NetPlayerFragment extends Fragment {
     }
 
     @Override
+    protected NetPlayPresenter createPresenter() {
+        return new NetPlayPresenter(getActivity());
+    }
+
+    @Override
+    protected int createViewLayoutId() {
+        return R.layout.fragment_net_player;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_net_player, container, false);
+    protected void initView(View rootView) {
+
     }
 }

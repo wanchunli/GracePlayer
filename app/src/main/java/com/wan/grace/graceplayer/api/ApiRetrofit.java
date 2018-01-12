@@ -25,13 +25,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiRetrofit {
 
     public MainApi mainApiService;
+    public NetPlayApi netPlayApiService;
     public static final String MAIN_BASE_URL = "http://api.map.baidu.com/telematics/v3/";
-    public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/api/4/";
+    public static final String NET_PLAY_BASE_URL = "http://news-at.zhihu.com/api/4/";
     public static final String GANK_BASE_URL = "http://gank.io/api/";
     public static final String DAILY_BASE_URL = "http://app3.qdaily.com/app3/";
 
     public MainApi getMainApiService() {
         return mainApiService;
+    }
+
+    public NetPlayApi getNetPlayApiService() {
+        return netPlayApiService;
     }
 
     ApiRetrofit() {
@@ -80,8 +85,15 @@ public class ApiRetrofit {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
+        Retrofit retrofit_netplay = new Retrofit.Builder()
+                .baseUrl(NET_PLAY_BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
         Retrofit retrofit_zhihu = new Retrofit.Builder()
-                .baseUrl(ZHIHU_BASE_URL)
+                .baseUrl(NET_PLAY_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

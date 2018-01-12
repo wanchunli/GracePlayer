@@ -2,6 +2,7 @@ package com.wan.grace.graceplayer.base;
 
 import com.wan.grace.graceplayer.api.ApiFactory;
 import com.wan.grace.graceplayer.api.MainApi;
+import com.wan.grace.graceplayer.api.NetPlayApi;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
@@ -17,6 +18,8 @@ public abstract class BaseClazzPresenter<V> {
     protected Reference<V> mViewRef;
 
     public static final MainApi mainApi = ApiFactory.getMainApiSingleton();
+
+    public static final NetPlayApi netPlayApi = ApiFactory.getNetPlayApiSingleton();
 
     public void attachView(V view){
         mViewRef = new WeakReference<V>(view);

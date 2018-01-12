@@ -11,7 +11,24 @@
         android:id="@+id/grace_control_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#CDBA96"
+        android:visibility="gone"
         android:scaleType="centerCrop" />
+
+    <com.cleveroad.audiovisualization.GLAudioVisualizationView
+        android:id="@+id/visualizer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:av_bubblesSize="@dimen/bubble_size"
+        app:av_bubblesRandomizeSizes="true"
+        app:av_wavesHeight="20dp"
+        app:av_wavesFooterHeight="20dp"
+        app:av_wavesCount="7"
+        app:av_layersCount="1"
+        android:visibility="gone"
+        app:av_backgroundColor="@color/av_color_bg"
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,6 +118,7 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="10dp"
+            android:progressTint="@color/white"
             android:progress="0" />
     </LinearLayout>
 </FrameLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,21 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         android:src="@drawable/play_page_default_bg" />
+
+    <com.cleveroad.audiovisualization.GLAudioVisualizationView
+        android:id="@+id/visualizer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:av_bubblesSize="@dimen/bubble_size"
+        app:av_bubblesRandomizeSizes="true"
+        app:av_wavesHeight="@dimen/wave_height"
+        app:av_wavesFooterHeight="@dimen/footer_height"
+        app:av_wavesCount="8"
+        app:av_layersCount="4"
+        app:av_backgroundColor="@color/av_color_bg"
+        />
 
     <LinearLayout
         android:id="@+id/ll_content"
@@ -67,20 +82,7 @@
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_play_page"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:overScrollMode="never" />
-
-        <com.wan.grace.graceplayer.widget.IndicatorLayout
-            android:id="@+id/il_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp" />
+        <include layout="@layout/fragment_play_page_lrc" />
 
         <include layout="@layout/include_play_page_controller" />
     </LinearLayout>

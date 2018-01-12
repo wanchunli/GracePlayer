@@ -8,17 +8,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.cleveroad.audiovisualization.AudioVisualization;
+import com.cleveroad.audiovisualization.DbmHandler;
 import com.wan.grace.graceplayer.R;
-import com.wan.grace.graceplayer.adapter.PlayPagerAdapter;
 import com.wan.grace.graceplayer.base.MVPBaseActivity;
 import com.wan.grace.graceplayer.bean.Song;
 import com.wan.grace.graceplayer.music.MusicPlayerContract;
@@ -28,10 +28,10 @@ import com.wan.grace.graceplayer.player.PlayMode;
 import com.wan.grace.graceplayer.player.PlaybackService;
 import com.wan.grace.graceplayer.source.AppRepository;
 import com.wan.grace.graceplayer.source.PreferenceManager;
+import com.wan.grace.graceplayer.utils.FileUtils;
 import com.wan.grace.graceplayer.utils.SystemUtils;
 import com.wan.grace.graceplayer.utils.TimeUtils;
-import com.wan.grace.graceplayer.widget.AlbumCoverView;
-import com.wan.grace.graceplayer.widget.IndicatorLayout;
+import com.wan.grace.graceplayer.utils.wave.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,8 +42,7 @@ import me.wcy.lrcview.LrcView;
 
 public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> implements
         MusicPlayerContract.View, IPlayback.Callback, PlayView, View.OnClickListener,
-        ViewPager.OnPageChangeListener, SeekBar.OnSeekBarChangeListener
-        , LrcView.OnPlayClickListener {
+        SeekBar.OnSeekBarChangeListener, LrcView.OnPlayClickListener {
 
     // Update seek bar every second
     private static final long UPDATE_PROGRESS_INTERVAL = 1000;
@@ -58,10 +57,6 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     //    @BindView(R.id.tv_artist)
     private TextView tvArtist;
     //    @BindView(R.id.vp_play_page)
-    private ViewPager vpPlay;
-    //    @BindView(R.id.il_indicator)
-    private IndicatorLayout ilIndicator;
-    //    @BindView(R.id.sb_progress)
     private SeekBar sbProgress;
     //    @BindView(R.id.tv_current_time)
     private TextView tvCurrentTime;
@@ -75,7 +70,6 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private ImageView ivNext;
     //    @BindView(R.id.iv_prev)
     private ImageView ivPrev;
-    private AlbumCoverView mAlbumCoverView;
     private LrcView mLrcViewSingle;
     private LrcView mLrcViewFull;
     private SeekBar sbVolume;
@@ -111,6 +105,10 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private IPlayback mPlayer;
     private MusicPlayerContract.Presenter mPlayPresenter;
 
+    private AudioRecordingDbmHandler handler;
+    private AudioRecorder audioRecorder;
+    private AudioVisualization audioVisualization;
+
     @Override
     protected int provideContentViewId() {
         return R.layout.activity_play;
@@ -124,6 +122,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     @Override
     public void onResume() {
         super.onResume();
+        audioVisualization.onResume();
     }
 
     @Override
@@ -133,6 +132,12 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
             mHandler.removeCallbacks(mProgressCallback);
             mHandler.post(mProgressCallback);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        audioVisualization.onPause();
     }
 
     @Override
@@ -147,14 +152,14 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         if (mPlayer != null) {
             onChangeImpl(mPlayer.getPlayingSong());
         }
-
+        startWave();
     }
 
     public void initView() {
+        audioVisualization = (AudioVisualization) findViewById(R.id.visualizer_view);
         ivBack = findViewById(R.id.iv_back);
         tvTitle = findViewById(R.id.tv_title);
         tvArtist = findViewById(R.id.tv_artist);
-        ilIndicator = findViewById(R.id.il_indicator);
         sbProgress = findViewById(R.id.sb_progress);
         tvCurrentTime = findViewById(R.id.tv_current_time);
         tvTotalTime = findViewById(R.id.tv_total_time);
@@ -162,7 +167,21 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         ivNext = findViewById(R.id.iv_next);
         ivPrev = findViewById(R.id.iv_prev);
         ivMode = findViewById(R.id.iv_mode);
+        //歌词相关
+        mLrcViewSingle = (LrcView) findViewById(R.id.lrc_view_single);
+        mLrcViewFull = (LrcView) findViewById(R.id.lrc_view_full);
+        sbVolume = (SeekBar) findViewById(R.id.sb_volume);
+        initVolume();
+        //监听事件
         setListener();
+    }
+
+    private void startWave() {
+        audioRecorder = new AudioRecorder();
+        handler = new AudioRecordingDbmHandler();
+        audioRecorder.recordingCallback(handler);
+        audioVisualization.linkTo(handler);
+        audioRecorder.startRecord();
     }
 
     private int getDuration(int progress) {
@@ -196,36 +215,13 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         mLastProgress = 0;
         tvCurrentTime.setText(R.string.play_time_start);
         tvTotalTime.setText(formatTime(song.getDuration()));
-        setCoverAndBg(song);
         setLrc(song);
         if (mPlayer.isPlaying()) {
             ivPlay.setSelected(true);
-//            mAlbumCoverView.start();
         } else {
             ivPlay.setSelected(false);
-//            mAlbumCoverView.pause();
         }
     }
-
-//    private void initViewPager() {
-//        vpPlay = findViewById(R.id.vp_play_page);
-//        View coverView = LayoutInflater.from(this).inflate(R.layout.fragment_play_page_cover, null);
-//        View lrcView = LayoutInflater.from(this).inflate(R.layout.fragment_play_page_lrc, null);
-//        mAlbumCoverView = (AlbumCoverView) coverView.findViewById(R.id.album_cover_view);
-//        mLrcViewSingle = (LrcView) coverView.findViewById(R.id.lrc_view_single);
-//        mLrcViewFull = (LrcView) lrcView.findViewById(R.id.lrc_view_full);
-//        sbVolume = (SeekBar) lrcView.findViewById(R.id.sb_volume);
-//        if(mPlayer!=null) {
-//            mAlbumCoverView.initNeedle(mPlayer.isPlaying());
-//        }
-//        mLrcViewFull.setOnPlayClickListener(this);
-//        initVolume();
-//
-//        mViewPagerContent = new ArrayList<>(2);
-//        mViewPagerContent.add(coverView);
-//        mViewPagerContent.add(lrcView);
-//        vpPlay.setAdapter(new PlayPagerAdapter(mViewPagerContent));
-//    }
 
     private void initVolume() {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -240,23 +236,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         ivPrev.setOnClickListener(this);
         ivNext.setOnClickListener(this);
         sbProgress.setOnSeekBarChangeListener(this);
-//        sbVolume.setOnSeekBarChangeListener(this);
-//        vpPlay.addOnPageChangeListener(this);
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
+        sbVolume.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -314,20 +294,14 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
             isDraggingProgress = false;
             seekTo(getDuration(seekBar.getProgress()));
             if (mPlayer.isPlaying()) {
+                int progress = seekBar.getProgress();
                 mHandler.removeCallbacks(mProgressCallback);
                 mHandler.post(mProgressCallback);
+                if (mLrcViewSingle.hasLrc()) {
+                    mLrcViewSingle.updateTime(progress);
+                    mLrcViewFull.updateTime(progress);
+                }
             }
-//            if (mPlayer.isPlaying() || mPlayer.pause()) {
-//                int progress = seekBar.getProgress();
-//                mPlayer.seekTo(progress);
-//
-//                if (mLrcViewSingle.hasLrc()) {
-//                    mLrcViewSingle.updateTime(progress);
-//                    mLrcViewFull.updateTime(progress);
-//                }
-//            } else {
-//                seekBar.setProgress(0);
-//            }
         } else if (seekBar == sbVolume) {
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, seekBar.getProgress(),
                     AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
@@ -358,6 +332,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         if (mPlayPresenter != null) {
             mPlayPresenter.unsubscribe();
         }
+        audioVisualization.release();
         super.onDestroy();
     }
 
@@ -387,16 +362,8 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
             mHandler.removeCallbacks(mProgressCallback);
             return;
         }
-        // Step 1: Song name and artist
         tvTitle.setText(song.getDisplayName());
         tvArtist.setText(song.getArtist());
-        // Step 2: favorite
-//        buttonFavoriteToggle.setImageResource(song.isFavorite() ? R.drawable.ic_favorite_yes : R.drawable.ic_favorite_no);
-        // Step 3: Duration
-//        textViewDuration.setText(TimeUtils.formatDuration(song.getDuration()));
-        // Step 4: Keep these things updated
-        // - Album rotation
-        // - Progress(textViewProgress & seekBarProgress)
         mHandler.removeCallbacks(mProgressCallback);
         if (mPlayer.isPlaying()) {
             mHandler.post(mProgressCallback);
@@ -412,7 +379,17 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         if (playMode == null) {
             playMode = PreferenceManager.lastPlayMode(this);
         }
-        switch (playMode) {
+        PreferenceManager.setPlayMode(PlayActivity.this, playMode);
+    }
+
+    private void switchPlayMode() {
+        PlayMode playMode = PreferenceManager.lastPlayMode(this);
+        PlayMode newMode = PlayMode.switchNextMode(playMode);
+        PreferenceManager.setPlayMode(PlayActivity.this, newMode);
+        mPlayer.setPlayMode(newMode);
+        updatePlayMode(newMode);
+        initPlayMode();
+        switch (newMode) {
             case LOOP:
                 showTips(getString(R.string.mode_loop));
                 break;
@@ -426,16 +403,6 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
                 showTips(getString(R.string.mode_list));
                 break;
         }
-        PreferenceManager.setPlayMode(PlayActivity.this, playMode);
-    }
-
-    private void switchPlayMode() {
-        PlayMode playMode = PreferenceManager.lastPlayMode(this);
-        PlayMode newMode = PlayMode.switchNextMode(playMode);
-        PreferenceManager.setPlayMode(PlayActivity.this, newMode);
-        mPlayer.setPlayMode(newMode);
-        updatePlayMode(newMode);
-        initPlayMode();
     }
 
     @Override
@@ -517,57 +484,18 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         }, 300);
     }
 
-    private void setCoverAndBg(Song song) {
-//        mAlbumCoverView.setCoverBitmap(CoverLoader.getInstance().loadRound(song));
-//        ivPlayingBg.setImageBitmap(CoverLoader.getInstance().loadBlur(song));
-    }
-
     private void setLrc(Song song) {
-//        if (song.getType() == Song.Type.LOCAL) {
-//            String lrcPath = FileUtils.getLrcFilePath(song);
-//            if (!TextUtils.isEmpty(lrcPath)) {
-//                loadLrc(lrcPath);
-//            } else {
-//                new SearchLrc(music.getArtist(), music.getTitle()) {
-//                    @Override
-//                    public void onPrepare() {
-//                        // 设置tag防止歌词下载完成后已切换歌曲
-//                        vpPlay.setTag(music);
-//
-//                        loadLrc("");
-//                        setLrcLabel("正在搜索歌词");
-//                    }
-//
-//                    @Override
-//                    public void onExecuteSuccess(@NonNull String lrcPath) {
-//                        if (vpPlay.getTag() != music) {
-//                            return;
-//                        }
-//
-//                        // 清除tag
-//                        vpPlay.setTag(null);
-//
-//                        loadLrc(lrcPath);
-//                        setLrcLabel("暂无歌词");
-//                    }
-//
-//                    @Override
-//                    public void onExecuteFail(Exception e) {
-//                        if (vpPlay.getTag() != music) {
-//                            return;
-//                        }
-//
-//                        // 清除tag
-//                        vpPlay.setTag(null);
-//
-//                        setLrcLabel("暂无歌词");
-//                    }
-//                }.execute();
-//            }
-//        } else {
-//            String lrcPath = FileUtils.getLrcDir() + FileUtils.getLrcFileName(music.getArtist(), music.getTitle());
-//            loadLrc(lrcPath);
-//        }
+        if (song.getType() == Song.Type.LOCAL) {
+            String lrcPath = FileUtils.getLrcFilePath(song);
+            if (!TextUtils.isEmpty(lrcPath)) {
+                loadLrc(lrcPath);
+            } else {
+
+            }
+        } else {
+            String lrcPath = FileUtils.getLrcDir() + FileUtils.getLrcFileName(song.getArtist(), song.getTitle());
+            loadLrc(lrcPath);
+        }
     }
 
     private void loadLrc(String path) {

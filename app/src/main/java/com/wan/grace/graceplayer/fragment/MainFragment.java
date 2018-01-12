@@ -94,8 +94,8 @@ public class MainFragment extends BaseFragment implements MusicPlayerContract.Vi
 
     //设置分割线
     private void setItemDecoration() {
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST);
-        recyclerView.addItemDecoration(itemDecoration);
+//        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL_LIST);
+//        recyclerView.addItemDecoration(itemDecoration);
     }
 
     //更新adapter界面

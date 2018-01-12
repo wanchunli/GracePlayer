@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cleveroad.audiovisualization.AudioVisualization;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.bean.PlayList;
@@ -37,6 +38,8 @@ import com.wan.grace.graceplayer.ui.main.MainActivity;
 import com.wan.grace.graceplayer.ui.play.PlayActivity;
 import com.wan.grace.graceplayer.utils.BlurUtils;
 import com.wan.grace.graceplayer.utils.RxBus;
+import com.wan.grace.graceplayer.utils.wave.AudioRecorder;
+import com.wan.grace.graceplayer.utils.wave.AudioRecordingDbmHandler;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import rx.Subscription;
@@ -64,6 +67,10 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
     private ImageView playQueue, next;
     private String TAG = "QuickControlsFragment";
     private static GraceControlFragment fragment;
+
+    private AudioRecordingDbmHandler handler;
+    private AudioRecorder audioRecorder;
+    private AudioVisualization audioVisualization;
 
     public GraceControlFragment() {
         // Required empty public constructor
@@ -137,8 +144,18 @@ public class GraceControlFragment extends BaseFragment implements MusicPlayerCon
             }
         });
         new MusicPlayerPresenter(getActivity(), AppRepository.getInstance(), this).subscribe();
-
+        audioVisualization = (AudioVisualization) rootView.findViewById(R.id.visualizer_view);
+        startWave();
         return rootView;
+    }
+
+    private void startWave() {
+
+        audioRecorder = new AudioRecorder();
+        handler = new AudioRecordingDbmHandler();
+        audioRecorder.recordingCallback(handler);
+        audioVisualization.linkTo(handler);
+        audioRecorder.startRecord();
     }
 
     private void loadGraceBg(ImageView graceImage) {

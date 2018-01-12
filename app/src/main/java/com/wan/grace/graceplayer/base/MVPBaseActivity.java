@@ -1,9 +1,12 @@
 package com.wan.grace.graceplayer.base;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -18,9 +21,11 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.wan.grace.graceplayer.MediaAidlInterface;
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.fragment.GraceControlFragment;
 import com.wan.grace.graceplayer.manager.Constants;
+import static com.wan.grace.graceplayer.player.Player.mService;
 
 import butterknife.ButterKnife;
 
@@ -30,7 +35,7 @@ import butterknife.ButterKnife;
  * Contact Me : werbhelius@gmail.com
  * Base of Activity
  */
-public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extends AppCompatActivity {
+public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extends AppCompatActivity implements ServiceConnection{
 
     protected T mPresenter;
     protected Toolbar mToolbar;
@@ -80,6 +85,17 @@ public abstract class MVPBaseActivity<V, T extends BaseClazzPresenter<V>> extend
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onServiceConnected(final ComponentName name, final IBinder service) {
+        mService = MediaAidlInterface.Stub.asInterface(service);
+    }
+
+    @Override
+    public void onServiceDisconnected(final ComponentName name) {
+        mService = null;
+    }
+
 
     /**
      * 判断当前 Activity 是否允许返回

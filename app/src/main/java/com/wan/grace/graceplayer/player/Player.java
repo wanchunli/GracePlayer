@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.wan.grace.graceplayer.MediaAidlInterface;
 import com.wan.grace.graceplayer.bean.PlayList;
 import com.wan.grace.graceplayer.bean.Song;
 
@@ -23,6 +24,8 @@ public class Player implements IPlayback, MediaPlayer.OnCompletionListener {
     private static final String TAG = "Player";
 
     private static volatile Player sInstance;
+
+    public static MediaAidlInterface mService = null;
 
     private MediaPlayer mPlayer;
 

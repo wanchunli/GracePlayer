@@ -22,7 +22,7 @@ import com.wan.grace.graceplayer.adapter.CustomViewPagerAdapter;
 import com.wan.grace.graceplayer.base.MVPBaseActivity;
 import com.wan.grace.graceplayer.bean.WeatherInfo;
 import com.wan.grace.graceplayer.fragment.MainFragment;
-import com.wan.grace.graceplayer.fragment.NetPlayerFragment;
+import com.wan.grace.graceplayer.fragment.netplay.NetPlayerFragment;
 import com.wan.grace.graceplayer.handler.HandlerUtil;
 import com.wan.grace.graceplayer.manager.AppContext;
 import com.wan.grace.graceplayer.ui.RoundCornerActivity;
