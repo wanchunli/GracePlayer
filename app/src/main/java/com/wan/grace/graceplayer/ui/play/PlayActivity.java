@@ -1,6 +1,9 @@
 package com.wan.grace.graceplayer.ui.play;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
@@ -21,6 +24,7 @@ import com.cleveroad.audiovisualization.DbmHandler;
 import com.wan.grace.graceplayer.R;
 import com.wan.grace.graceplayer.base.MVPBaseActivity;
 import com.wan.grace.graceplayer.bean.Song;
+import com.wan.grace.graceplayer.constants.Actions;
 import com.wan.grace.graceplayer.music.MusicPlayerContract;
 import com.wan.grace.graceplayer.music.MusicPlayerPresenter;
 import com.wan.grace.graceplayer.player.IPlayback;
@@ -123,6 +127,8 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     public void onResume() {
         super.onResume();
         audioVisualization.onResume();
+        IntentFilter filter = new IntentFilter(Actions.VOLUME_CHANGED_ACTION);
+        registerReceiver(mVolumeReceiver, filter);
     }
 
     @Override
@@ -333,6 +339,7 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
             mPlayPresenter.unsubscribe();
         }
         audioVisualization.release();
+        unregisterReceiver(mVolumeReceiver);
         super.onDestroy();
     }
 
@@ -488,13 +495,13 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
         if (song.getType() == Song.Type.LOCAL) {
             String lrcPath = FileUtils.getLrcFilePath(song);
             if (!TextUtils.isEmpty(lrcPath)) {
-                loadLrc(lrcPath);
+//                loadLrc(lrcPath);
             } else {
 
             }
         } else {
             String lrcPath = FileUtils.getLrcDir() + FileUtils.getLrcFileName(song.getArtist(), song.getTitle());
-            loadLrc(lrcPath);
+//            loadLrc(lrcPath);
         }
     }
 
@@ -512,5 +519,12 @@ public class PlayActivity extends MVPBaseActivity<PlayView, PlayPresenter> imple
     private String formatTime(long time) {
         return SystemUtils.formatTime("mm:ss", time);
     }
+
+    private BroadcastReceiver mVolumeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sbVolume.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        }
+    };
 
 }
